@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { useCallback, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { load, Store } from "@tauri-apps/plugin-store";
+import { load } from "@tauri-apps/plugin-store";
 // import { appDataDir } from "@tauri-apps/api/path";
 
 const geistSans = Geist({
@@ -38,23 +38,23 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const route = useRouter();
-
+  
   const loadSettingsCheck = useCallback(async () => {
-    // const dir = await appDataDir();
-    // console.log("dir", dir);
-    const settings = await load("rekan.settings.json", { createNew: true });
-    
-    await settings.reload();
-    let workspace : string[] = await settings.get<string[]>("vaults") || [];
-    workspace = Array.isArray(workspace) ? workspace : [];
-
-    if (workspace.length === 0) {
-      console.log("No workspace found");
+    try {
+      const settings = await load("rekan.settings.json");
+      
+      await settings.reload();
+      let workspace : string[] = await settings.get<string[]>("vaults") || [];
+      workspace = Array.isArray(workspace) ? workspace : [];
+  
+      if (workspace.length === 0) {
+        route.push("/setup");
+        return;
+      }
+    } catch {
       route.push("/setup");
       return;
     }
-    
-    console.log("workspace", workspace);
   }, [route]);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useEffect, useCallback, useState } from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -18,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { load } from "@tauri-apps/plugin-store"
 
 const frameworks = [
   {
@@ -43,8 +44,27 @@ const frameworks = [
 ]
 
 export function Workspace() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+
+  const [currentWorkspace, setCurrentWorkspace] = useState<string[]>([])
+
+  const w = useCallback(async () => {
+    try {
+      const settings = await load("rekan.settings.json")
+      await settings.reload()
+      let workspace: string[] = await settings.get<string[]>("vaults") || []
+      workspace = Array.isArray(workspace) ? workspace : [];
+
+      setCurrentWorkspace(workspace);
+    } catch (error) {
+      console.error("Error loading workspace:", error);
+    }
+  }, [])
+
+  useEffect(() => {
+    w();
+  }, [w])
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

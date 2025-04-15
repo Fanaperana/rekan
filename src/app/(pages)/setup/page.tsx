@@ -57,6 +57,7 @@ export default function RekanSetupPage() {
       try {
         // Try to load existing store
         store = await Store.load('rekan.settings.json');
+        await store.reload(); // Reload to ensure we have the latest data
       } catch {
         // If loading fails, create a new store with createNew option
         console.log('Creating new settings file');
