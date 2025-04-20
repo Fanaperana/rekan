@@ -47,6 +47,8 @@ export function Editor() {
 			},
 			lineNumbers: false,
 			lineWrapping: true,
+			cursorBlinkRate: 350,
+			cursorHeight: .85,
 			theme: "hypermd-dark",
 			gutters: [],
 			extraKeys: {
@@ -73,6 +75,8 @@ export function Editor() {
 				code: true,
 				emoji: true
 			}
+			
+			
 		};
 
 		const newEditor = HyperMD.fromTextArea(el.current, options);
@@ -101,20 +105,18 @@ export function Editor() {
 
 		return () => {
 			if (newEditor) {
-				newEditor.toTextArea();
+				newEditor.getWrapperElement().remove();
 			}
 		};
 	}, []);
 
 
 	return (
-		<div className='flex flex-col w-full h-full p-2'>
+		<div className='flex flex-col w-full h-full'>
 			<div>Editor</div>
-			<div className='flex flex-col w-full h-full'>
-				<div className='border-gray-500 rounded-lg w-full h-full overflow-hidden p-4 bg-[#1a1a1a]'>
-					<textarea name="" id="" ref={el}></textarea>
-				</div>
-			</div>
+			<textarea name="" id="" ref={el}></textarea>
+			{/* <div className='border-gray-500 w-full h-full overflow-hidden'>
+			</div> */}
 		</div>
 	)
 }

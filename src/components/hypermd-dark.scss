@@ -8,7 +8,8 @@
 .cm-s-hypermd-dark {
     $fs: 12pt;  //default font-size
 
-    $editor-background: #1a1a1a;
+    // $editor-background: #1a1a1a;
+    $editor-background:  #0a0a0a;
     $editor-color: #e0e0e0;
 
     $line-height: 1.5;
@@ -33,8 +34,8 @@
 
     $codeblock-border: 1px solid #333;
     $codeblock-padding: 5px;
-    $codeblock-bg: #24283b;
-    $codeblock-bg-edge: #1f2335;
+    $codeblock-bg: #272a36;
+    $codeblock-bg-edge: #272a36;
 
     $hashtag-fontsize: 0.84em;
     $hashtag-padding-x: 6px;
@@ -44,6 +45,9 @@
     $hr-color: #333;
     $hr-image: $table-row-1-image;
     $hr-padding: 5px;
+
+    $hr-border: 1px solid #424242;
+    $hr-margin: 10px 0;
 
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Helvetica Neue", Helvetica, Arial, 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Noto Sans CJK SC', 'Microsoft YaHei', STHeiti, 'Microsoft Jhenghei', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     -webkit-font-smoothing: antialiased;
@@ -111,6 +115,22 @@
         border-left: 0 !important;
         padding-bottom: .25em;
 
+        /* Show hashtags for active lines */
+        .cm-formatting-header {
+            /* Default state - visible */
+            display: inline;
+        }
+        
+        /* Hide hashtags only when the line is inactive */
+        &.hmd-inactive-line .cm-formatting-header {
+            display: none;
+        }
+        
+        /* Adjust left padding to compensate for hidden hashtags when needed */
+        &.hmd-inactive-line .cm-header {
+            padding-left: 0;
+        }
+
         &.HyperMD-header-1 { font-weight: 600; font-size: $fs * 2; }
         &.HyperMD-header-2 { font-weight: 600; font-size: $fs * 1.5; }
         &.HyperMD-header-3 { font-size: $fs * 1.2; }
@@ -121,7 +141,64 @@
             margin-top: 2px;
             height: 1px;
             background: $hr-color;
-            opacity: 0.2;
+            opacity: 0.1;
+        }
+    }
+
+    /* Hide link icons */
+    .hmd-link-icon {
+        display: none !important;
+    }
+    
+    /* Optionally, also hide the containing widget if needed */
+    .CodeMirror-widget:has(.hmd-link-icon) {
+        display: none !important;
+    }
+
+    /// HR element styling
+    // pre.HyperMD-hr {
+    //     line-height: $line-height !important;
+    //     font-family: inherit !important;
+    //     padding-left: $line-padding !important;
+    //     margin-left: 0 !important;
+    //     border-left: 0 !important;
+    //     padding-bottom: .25em;
+
+        
+    //     &:after {
+    //         display: block;
+    //         content: ' ';
+    //         margin-top: 2px;
+    //         height: 1px;
+    //         background: $hr-color;
+    //     }
+    // }
+
+
+    /// HR element styling
+    pre.HyperMD-hr {
+        height: auto;
+        line-height: $line-height !important;
+        
+        /* When inactive (normal state) */
+        &.hmd-inactive-line {
+            /* Hide the actual HR text */
+            .cm-hr {
+                display: none;
+            }
+            
+            /* Show a full-width border instead */
+            border-bottom: $hr-border;
+            // margin-bottom: 10px;
+            opacity: 0.5;
+        }
+        
+        /* When active (being edited) */
+        &:not(.hmd-inactive-line) {
+            /* Just show the HR text (*** or ---) */
+            .cm-hr {
+                display: inline;
+            }
         }
     }
 
@@ -131,6 +208,14 @@
         border-left: $codeblock-border;
         border-right: $codeblock-border;
     }
+    div.HyperMD-codeblock-begin-bg {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+    div.HyperMD-codeblock-end-bg {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
 
     div.HyperMD-codeblock-begin-bg,
     div.HyperMD-codeblock-end-bg {
@@ -139,7 +224,7 @@
 
     pre.HyperMD-codeblock {
         @extend %monospace;
-        color: #bb9af7;
+        color: #ffffff;
     }
 
     /// Inline code
@@ -168,6 +253,33 @@
     /// Task lists
     span.cm-formatting-task {
         color: rgba($editor-color, 0.5);
+    }
+
+    /// Quotes
+    pre.HyperMD-quote {
+        position: relative;
+        padding: $quote-margin 0 $quote-margin $quote-padding;
+        // padding: $quote-padding $quote-padding $quote-padding ($quote-padding + 8px);
+        background: rgba($editor-color, 0.04);
+        border-left: 4px solid #f27a1a;
+        color: #bfbfbf;
+
+        // Hide the '>' symbol
+        .cm-formatting-quote {
+            display: none !important;
+        }
+
+        // Optional: style nested quotes
+        &.HyperMD-quote-2 {
+            padding-left: 1.5em;
+            border-left-color: #e05d15;
+            background: rgba($editor-color, 0.06);
+        }
+        &.HyperMD-quote-3 {
+            padding-left: 3em;
+            border-left-color: #f4a94b;
+            background: rgba($editor-color, 0.08);
+        }
     }
 
     /// Quotes
