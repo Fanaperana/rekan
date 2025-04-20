@@ -16,7 +16,7 @@ const Editor = dynamic(() => import('@/components/Editor').then((mod) => mod.Edi
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-1">
+    <div className="flex flex-col items-center justify-center w-full h-full">
       <div className="w-full flex flex-row">
         <Workspace></Workspace>
         <Button variant={"outline"} size={"icon"} className="ml-2">
@@ -28,7 +28,7 @@ export default function Home() {
           </Button>
         </Link>
       </div>
-      <main className="flex flex-col items-center justify-center w-full h-full">
+      <main className="w-full h-full">
         <Editor />
       </main>
     </div>
